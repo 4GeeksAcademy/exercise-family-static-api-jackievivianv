@@ -25,6 +25,8 @@ def handle_invalid_usage(error):
 def sitemap():
     return generate_sitemap(app)
 
+#construcción de endpoints
+
 @app.route('/members', methods=['GET'])
 def handle_hello():
 
@@ -34,6 +36,55 @@ def handle_hello():
         "hello": "world",
         "family": members
     }
+
+
+    return jsonify(response_body), 200
+
+
+@app.route('/member/<int:member_id>', methods=['GET'])
+def get_one_member(member_id):
+    print(member_id)
+    # this is how you can use the Family datastructure by calling its methods
+    member = jackson_family.get_member(member_id)
+    print(member)
+
+    response_body = {
+       "member": member
+     }
+
+
+    return jsonify(response_body), 200
+
+
+@app.route('/member/', methods=['POST'])
+def add_new_member():
+  
+    # this is how you can use the Family datastructure by calling its methods
+    request_body = request.json
+
+    #required_fields = ["first_name", "age", "lucky_numbers"]
+
+    new_member = {
+        "first_name": request_body["first_name"],
+        "age": request_body["age"],
+        "lucky_numbers": request_body["lucky_numbers"],
+        "id": jackson_family._generateId()  
+    }
+
+    jackson_family.add_member(new_member)
+
+    return jsonify(new_member), 200
+
+@app.route('/member/<int:member_id>', methods=['DELETE'])
+def delete_one_member(member_id):
+    print(member_id)
+    # this is how you can use the Family datastructure by calling its methods
+    member = jackson_family.delete_member(member_id)
+    print(member)
+
+    response_body = {
+       "done": True
+     }
 
 
     return jsonify(response_body), 200
