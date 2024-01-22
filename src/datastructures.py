@@ -62,8 +62,12 @@ class FamilyStructure:
         for delete_member in self._members:
             
             if delete_member["id"] == id:
-                self._members.remove(id)
+                self._members.remove(delete_member)
                 return delete_member
+            else:
+                no_member = {}
+                return no_member
+
         
         pass
 
@@ -75,6 +79,9 @@ class FamilyStructure:
             
             if one_member["id"] == id:
                 return one_member
+            else:
+                no_member = {}
+                return no_member
 
                
         

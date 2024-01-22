@@ -48,12 +48,15 @@ def get_one_member(member_id):
     member = jackson_family.get_member(member_id)
     print(member)
 
+
     response_body = {
        "member": member
      }
-
-
-    return jsonify(response_body), 200
+    
+    if member == {}:
+         return jsonify("El usuario no existe"), 404
+    else:
+        return jsonify(response_body), 200
 
 
 @app.route('/member/', methods=['POST'])
@@ -62,7 +65,9 @@ def add_new_member():
     # this is how you can use the Family datastructure by calling its methods
     request_body = request.json
 
-    #required_fields = ["first_name", "age", "lucky_numbers"]
+    required_fields = ["first_name", "age", "lucky_numbers"]
+    if not all(field in request_body for field in required_fields):
+        return jsonify({"error": "Missing required fields"}), 400
 
     new_member = {
         "first_name": request_body["first_name"],
@@ -80,14 +85,16 @@ def delete_one_member(member_id):
     print(member_id)
     # this is how you can use the Family datastructure by calling its methods
     member = jackson_family.delete_member(member_id)
-    print(member)
-
+    
     response_body = {
        "done": True
      }
 
-
-    return jsonify(response_body), 200
+    if member == {}:
+         return jsonify("El usuario no existe"), 404
+    else:
+        return jsonify(response_body), 200
+    
 
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
